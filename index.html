@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>楽器サウンドボード</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="押すと鳴る、押さなくても気になる、6ボタンの愉快なサウンドボード。"/>
+</head>
+
+<body>
+  <div class="instrument-app" role="application" aria-label="6つのサウンドで遊ぶアプリ">
+    <h1> Let’s make some noise!</h1>
+
+    <p aria-live="polite" style="margin:0 0 16px;">
+      今日も指先に拍手を。<br>
+      <small>※静かな場所ではほどほどに</small>
+    </p>
+
+    <div class="buttons-container" role="group" aria-label="サウンドボタン6個">
+      
+      <button class="sound-button" data-sound="sound1" aria-label="ボタン1：サックス。渋カッコいいやつ">
+        <span class="label">🎷 SAX</span>
+      </button>
+      <button class="sound-button" data-sound="sound2" aria-label="ボタン2：アコーディオン。急にパリ感">
+        <span class="label">🪗 ACC</span>
+      </button>
+      <button class="sound-button" data-sound="sound3" aria-label="ボタン3：チェロ。低音でドヤ顔">
+        <span class="label">🎻 CELLO</span>
+      </button>
+      <button class="sound-button" data-sound="sound4" aria-label="ボタン4：タンバリン。陽気な主役">
+        <span class="label">🥁 TAM</span>
+      </button>
+      <button class="sound-button" data-sound="sound5" aria-label="ボタン5：ハーモニカ。旅に出たくなる音">
+        <span class="label">🎶 HARP</span>
+      </button>
+      <button class="sound-button" data-sound="sound6" aria-label="ボタン6：和の弦。突然の京都感">
+        <span class="label">🎸 GT</span>
+      </button>
+    </div>
+       <!-- ▼ ここから追加：称号＆秘密メッセージ表示 -->
+    <div class="hud" aria-live="polite" style="margin-top:14px;">
+      <div id="rank">称号：<strong>見習いタッパー Lv.1</strong></div>
+      <div id="tapCount">総タップ：0</div>
+    </div>
+
+    <p id="secret-msg" class="secret-msg" hidden>
+      🔓 裏コード「251」このヒントを元にボタンを押すと・・・？
+    </p>
+    <!-- ▲ ここまで追加 -->
+
+    <details style="margin-top:18px;">
+      <summary>小ワザを見る</summary>
+      <ul style="text-align:left; margin:10px auto 0; width:min(480px, 90%); line-height:1.6;">
+        <li>同時押しOK：重ねると割とオシャレ。</li>
+        <li>静かにしたい時は…心で押す（無音）。</li>
+      </ul>
+    </details>
+
+    <p style="margin-top:22px;">
+      <a href="https://pocket-se.info/" target="_blank" rel="noopener noreferrer">ポケットサウンド/効果音素材</a>
+      <br><small>※感謝の気持ちはボタン連打で表現できます。</small>
+    </p>
+
+    <noscript>
+      <p style="margin-top:16px;color:#555;">
+        JavaScriptをONにすると鳴ります。今は“脳内再生”モードです🧠🎧
+      </p>
+    </noscript>
+  </div>
+
+
+  <audio id="sound1" src="sounds/saxophone-sound.mp3"></audio>
+  <audio id="sound2" src="sounds/re3-d-accordion.mp3"></audio>
+  <audio id="sound3" src="sounds/cello-single-medium.mp3"></audio>
+  <audio id="sound4" src="sounds/single.mp3"></audio>
+  <audio id="sound5" src="sounds/a-small-creature-appeared-in-the-frame.mp3"></audio>
+  <audio id="sound6" src="sounds/single-sound-d.mp3"></audio>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+/* ============================
+   Sound Buttons: Neo Glass UI
+   ============================ */
+
+/* テーマ変数（色やサイズを一括管理） */
+:root {
+  --bg1: #d7e4ff;
+  --bg2: #f6f9ff;
+  --accent: #f68c03;
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-br: 18px;
+  --glass-blur: 14px;
+  --card-shadow: 0 10px 30px rgba(49, 74, 138, 0.25);
+
+  --btn-size: clamp(72px, 8vw, 96px);
+  --btn-radius: 22px;
+  --btn-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  --btn-shadow-hover: 0 16px 36px rgba(0, 0, 0, 0.26);
+
+  --ring: 0 0 0 4px rgba(246, 140, 3, 0.25);
+  --title-shadow: 0 6px 24px rgba(246, 140, 3, 0.35);
+}
+
+/* プレイフルなグラデ背景＋微妙なアニメ */
+body {
+  font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, "Arial", sans-serif;
+  background:
+    radial-gradient(1200px 800px at 10% 15%, #e8f0ff 0%, transparent 60%),
+    radial-gradient(1000px 900px at 90% 85%, #ffe8d0 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg2), var(--bg1));
+  margin: 0;
+  min-height: 100vh;
+
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* うっすら動くノイズ/粒子レイヤー */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  background:
+    radial-gradient(40px 40px at 20% 30%, rgba(255,255,255,0.25) 0%, transparent 70%),
+    radial-gradient(40px 40px at 75% 60%, rgba(255,255,255,0.18) 0%, transparent 70%),
+    radial-gradient(60px 60px at 50% 80%, rgba(255,255,255,0.14) 0%, transparent 70%);
+  filter: blur(12px) saturate(120%);
+  animation: float-bg 32s linear infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes float-bg {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(2%, -2%, 0) scale(1.03); }
+}
+
+/* アプリ全体カード（グラスモーフィズム） */
+.instrument-app {
+  text-align: center;
+  padding: clamp(28px, 4vw, 40px);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border-radius: var(--glass-br);
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  position: relative;
+}
+
+/* タイトルはグラデ文字＋発光 */
+h1 {
+  font-size: clamp(2rem, 4.5vw, 2.8rem);
+  margin: 0 0 clamp(28px, 5vw, 36px);
+  line-height: 1.14;
+  letter-spacing: 0.02em;
+  color: transparent;
+  background: linear-gradient(90deg, #ff9f3a 0%, #ffcd7a 45%, #ffdca8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: var(--title-shadow);
+}
+
+/* 6ボタンのレイアウトをレスポンシブなGridに */
+.buttons-container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(80px, 1fr));
+  gap: clamp(18px, 3vw, 26px);
+  width: min(520px, 86vw);
+  margin-inline: auto;
+  align-items: center;
+  justify-items: center;
+}
+
+/* ボタンのベース：立体感＋リップル＋発光リング */
+.sound-button {
+  --twinkle: 12%;
+  width: var(--btn-size);
+  height: var(--btn-size);
+  border: none;
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  position: relative;
+
+  /* 深みのあるグラデで“押したくなる感” */
+  background:
+    radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.30) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.22), rgba(0,0,0,0.08));
+
+  box-shadow: var(--btn-shadow);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+  isolation: isolate;
+  outline: none;
+}
+
+/* 各ボタンの“固有色”は下層レイヤーで */
+.sound-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  background: var(--hue, #999);
+  filter: saturate(115%);
+}
+
+/* 押した瞬間のリップル */
+.sound-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transform: scale(0.6);
+  opacity: 0;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(255,255,255,0.85), transparent 70%);
+  transition: transform 260ms ease, opacity 260ms ease;
+}
+
+/* ホバーでふわっと */
+.sound-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--btn-shadow-hover);
+  filter: brightness(1.02);
+}
+
+/* クリック感：軽い押し込み＋リップル拡大 */
+.sound-button:active {
+  transform: translateY(0) scale(0.96);
+}
+.sound-button:active::after {
+  transform: scale(1.12);
+  opacity: 0.9;
+}
+
+/* キーボード操作のフォーカスリング（アクセシビリティ） */
+.sound-button:focus-visible {
+  box-shadow: var(--btn-shadow-hover), var(--ring);
+}
+
+/* 再生中の視覚フィードバック用クラス（JSで付与を想定）
+   .is-playing を付けると、淡いパルスが呼吸するように点滅します */
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.55), var(--btn-shadow); }
+  50%      { box-shadow: 0 0 0 12px rgba(255,255,255,0.15), var(--btn-shadow); }
+}
+.sound-button.is-playing::after {
+  opacity: 0.85;
+  transform: scale(1.06);
+}
+.sound-button.is-playing {
+  animation: pulse 1100ms ease-in-out infinite;
+}
+
+/* 各ボタンのカラーバリエーション（個性が出るよう微調整） */
+.sound-button:nth-child(1) { --hue: linear-gradient(135deg, #ff4d4d, #ff7a66); }
+.sound-button:nth-child(2) { --hue: linear-gradient(135deg, #2ecc71, #8bdc8b); }
+.sound-button:nth-child(3) { --hue: linear-gradient(135deg, #2196f3, #7ebcff); }
+.sound-button:nth-child(4) { --hue: linear-gradient(135deg, #ffeb3b, #ffd166); }
+.sound-button:nth-child(5) { --hue: linear-gradient(135deg, #9c27b0, #d17ee8); }
+.sound-button:nth-child(6) { --hue: linear-gradient(135deg, #ff8c42, #ffc371); }
+
+/* 角丸の形状をボタンごとに少しずらして“オリジナル感”を演出 */
+.sound-button:nth-child(1) { border-top-left-radius: 34px; }
+.sound-button:nth-child(2) { border-top-right-radius: 28px; }
+.sound-button:nth-child(3) { border-bottom-left-radius: 26px; }
+.sound-button:nth-child(4) { border-bottom-right-radius: 32px; }
+.sound-button:nth-child(5) { border-radius: 28px 22px 26px 20px / 24px 26px 20px 28px; }
+.sound-button:nth-child(6) { border-radius: 20px 30px 20px 30px; }
+
+/* ラベルを載せたい場合の共通スタイル（任意）
+   <button class="sound-button"><span class="label">WATER</span></button> */
+.sound-button .label {
+  display: inline-block;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-size: clamp(12px, 1.8vw, 14px);
+  user-select: none;
+}
+
+/* モバイルで指が届きやすいよう余白を最適化 */
+@media (max-width: 480px) {
+  .instrument-app {
+    padding: 22px;
+  }
+  .buttons-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 低モーション環境への配慮 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+/* ====== 追加：称号＆隠しコマンド演出 ====== */
+.hud {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.secret-msg {
+  margin-top: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(255, 214, 102, 0.25);
+  border: 1px solid rgba(255, 214, 102, 0.6);
+  display: inline-block;
+  transform: translateY(-6px);
+  transition: all 240ms ease;
+}
+.secret-msg.show {
+  transform: translateY(0);
+}
+
+/* 秘密発動中の枠演出 */
+.instrument-app.easter-egg {
+  box-shadow: 0 0 0 4px rgba(255, 214, 102, 0.45), var(--card-shadow);
+}
+
+/* ボタンのチカチカ（flash） */
+@keyframes egg-flash {
+  0%, 100% { filter: brightness(1); transform: translateY(-2px) scale(1.02); }
+  50% { filter: brightness(1.25); transform: translateY(-3px) scale(1.06); }
+}
+.sound-button.flash {
+  animation: egg-flash 600ms ease-in-out 3;
+}
